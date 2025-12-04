@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Etl.Worker.Loaders
 {
-    public class EfLoader : ILoader<FactVent>
+    public class EfLoader: ILoader<FactVent>
     {
         private readonly EtlDbContext _db;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Etl.Core.Models
 {
     public class DimTiempo
     {
+        [Key]
         public int FechaKey { get; set; }
         public DateTime Fecha_Complet { get; set; }
         public int Año { get; set; }

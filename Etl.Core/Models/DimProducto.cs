@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Etl.Core.Models
 {
     public class DimProducto
     {
+        [Key]
         public int ProductKey { get; set; }
         public string Codigo_Producto { get; set; } = string.Empty;
         public string Nombre_Producto { get; set; } = string.Empty;

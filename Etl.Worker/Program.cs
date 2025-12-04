@@ -1,5 +1,6 @@
 using Etl.Core.Innterface;
 using Etl.Core.Models;
+using Etl.Core.Models.Dtos;
 using Etl.Data;
 using Etl.Infrastructure.Estractors;
 using Etl.Worker;
@@ -10,13 +11,42 @@ using Microsoft.EntityFrameworkCore;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((ctx, services) =>
     {
-        services.AddDbContext<EtlDbContext>(opt =>
-            opt.UseSqlServer("Server=localhost;Database=ETL_DB;Trusted_Connection=True;TrustServerCertificate=True"));
+        // Configurar DbContext
+        var connectionString = ctx.Configuration.GetConnectionString("MainDb")
+            ?? "Server=LENOVO12JANABJ;Database=DWSisVentas;Integrated Security=true;TrustServerCertificate=true";
 
-        string csvPath = Path.Combine(AppContext.BaseDirectory, "ventas.csv");
-        services.AddSingleton<IExtractor<RawVentaDto>>(sp => new CsvExtractor<RawVentaDto>(csvPath));
-        services.AddTransient<ITransformer<RawVentaDto, FactVent>, FactTransformer>();
+        services.AddDbContext<EtlDbContext>(opt =>
+            opt.UseSqlServer(connectionString));
+
+        string baseDir = Path.Combine(AppContext.BaseDirectory, "Data");
+        string customersPath = Path.Combine(baseDir, "customers.csv");
+        string productsPath = Path.Combine(baseDir, "products.csv");
+        string ordersPath = Path.Combine(baseDir, "orders.csv");
+        string orderDetailsPath = Path.Combine(baseDir, "order_details.csv");
+
+        services.AddTransient<IExtractor<CustomerDto>>(sp =>
+            new CsvExtractor<CustomerDto>(customersPath));
+        services.AddTransient<IExtractor<ProductDto>>(sp =>
+            new CsvExtractor<ProductDto>(productsPath));
+        services.AddTransient<IExtractor<OrderDto>>(sp =>
+            new CsvExtractor<OrderDto>(ordersPath));
+        services.AddTransient<IExtractor<OrderDetailDto>>(sp =>
+            new CsvExtractor<OrderDetailDto>(orderDetailsPath));
+
+        services.AddTransient<ITransformer<CustomerDto, DimCliente>, ClienteTransformer>();
+        services.AddTransient<ITransformer<ProductDto, DimProducto>, ProductoTransformer>();
+        services.AddTransient<ITransformer<OrderDto, DimTienda>, TiendaTransformer>();
+        services.AddTransient<ITransformer<OrderDto, DimCanal>, CanalTransformer>();
+        services.AddTransient<ITransformer<OrderDto, DimTiempo>, TiempoTransformer>();
+        services.AddTransient<FactVentCompleteTransformer>();
+
+        services.AddTransient<ILoader<DimCliente>, ClienteLoader>();
+        services.AddTransient<ILoader<DimProducto>, ProductoLoader>();
+        services.AddTransient<ILoader<DimTienda>, TiendaLoader>();
+        services.AddTransient<ILoader<DimCanal>, CanalLoader>();
+        services.AddTransient<ILoader<DimTiempo>, TiempoLoader>();
         services.AddTransient<ILoader<FactVent>, EfLoader>();
+
         services.AddHostedService<Worker>();
     })
     .Build();

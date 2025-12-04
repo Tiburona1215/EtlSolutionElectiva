@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,9 @@ namespace Etl.Core.Models
 {
     public class DimCliente
     {
+        [Key]
         public int ClienteKey { get; set; }
-        public string ID_Cliente { get; set; } = string.Empty;
+        public int ID_Cliente { get; set; }
         public string Nombre_Cliente { get; set; } = string.Empty;
         public string Tipo_Cliente { get; set; } = string.Empty;
         public string Pais { get; set; } = string.Empty;
