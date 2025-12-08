@@ -13,14 +13,20 @@ namespace Etl.Worker.Transformers
     {
         public Task<IEnumerable<DimCanal>> TransformAsync(IEnumerable<OrderDto> input, CancellationToken ct = default)
         {
-            var transformed = input
-                .GroupBy(o => o.Channel)
-                .Select(g => new DimCanal
-                {
-                    Nombre_Canal = g.Key,
-                    Descripcion = $"Canal de venta {g.Key}"
-                });
-            return Task.FromResult(transformed);
+            var transformed = new List<DimCanal>
+        {
+            new DimCanal
+            {
+                Nombre_Canal = "Online",
+                Descripción = "Venta realizada a través del sitio web"
+            },
+            new DimCanal
+            {
+                Nombre_Canal = "Físico",
+                Descripción = "Venta realizada en tienda física"
+            }
+        };
+            return Task.FromResult(transformed.AsEnumerable());
         }
     }
 }

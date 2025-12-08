@@ -16,8 +16,9 @@ namespace Etl.Worker.Transformers
             var transformed = input.Select(dto => new DimCliente
             {
                 ID_Cliente = dto.CustomerID,
-                //Nombre_Cliente = dto.CustomerName,
-              //  Tipo_Cliente = dto.CustomerType,
+                Nombre_Cliente = dto.FirstName,
+                LastName_Cliente = dto.LastName,
+              // Tipo_Cliente = dto.CustomerType,
                 Pais = dto.Country,
                // Region = dto.Region,
                 Ciudad = dto.City,

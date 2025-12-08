@@ -14,9 +14,7 @@ namespace Etl.Core.Models
         public int FechaKey { get; set; }
         public int ProductKey { get; set; }
         public int ClienteKey { get; set; }
-        public int TiendaKey { get; set; }
         public int CanalKey { get; set; }
-
         public int Cantidad_Vendida { get; set; }
         public decimal Precio_Unitario { get; set; }
         public decimal Descuento { get; set; }
@@ -28,7 +26,6 @@ namespace Etl.Core.Models
 
         public DimProducto? Producto { get; set; }
         public DimCliente? Cliente { get; set; }
-        public DimTienda? Tienda { get; set; }
         public DimCanal? Canal { get; set; }
         public DimTiempo? Tiempo { get; set; }
     }

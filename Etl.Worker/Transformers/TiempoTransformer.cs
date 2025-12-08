@@ -19,6 +19,7 @@ namespace Etl.Worker.Transformers
                 .Distinct()
                 .Select(fecha => new DimTiempo
                 {
+                    FechaKey = int.Parse(fecha.ToString("yyyyMMdd")),
                     Fecha_Complet = fecha,
                     Año = fecha.Year,
                     Mes = fecha.Month,

@@ -34,31 +34,26 @@ namespace Etl.Worker.Transformers
                     .FirstOrDefaultAsync(ct);
 
                 var productoKey = await _db.Dim_Producto
-                    .Where(p => p.Codigo_Producto == detail.ProductID)
+                    .Where(p => Convert.ToInt32(p.Codigo_Producto) == detail.ProductID)
                     .Select(p => p.ProductKey)
                     .FirstOrDefaultAsync(ct);
 
-                var tiendaKey = await _db.Dim_Tienda
-                    .Where(t => t.Nombre_Tienda == order.StoreName)
-                    .Select(t => t.TiendaKey)
-                    .FirstOrDefaultAsync(ct);
-
-                var canalKey = await _db.Dim_Canal
-                    .Where(c => c.Nombre_Canal == order.Channel)
-                    .Select(c => c.CanalKey)
-                    .FirstOrDefaultAsync(ct);
+                //var canalKey = await _db.Dim_Canal
+                //    .Where(c => c.Nombre_Canal == order.Channel)
+                //    .Select(c => c.CanalKey)
+                //    .FirstOrDefaultAsync(ct);
 
                 var fechaKey = await _db.Dim_Tiempo
                     .Where(t => t.Fecha_Complet.Date == order.OrderDate.Date)
                     .Select(t => t.FechaKey)
                     .FirstOrDefaultAsync(ct);
 
-                if (clienteKey == 0 || productoKey == 0 || tiendaKey == 0 ||
-                    canalKey == 0 || fechaKey == 0)
-                    continue;
+                //if (clienteKey == 0 || productoKey == 0 || tiendaKey == 0 ||
+                //    canalKey == 0 || fechaKey == 0)
+                //    continue;
 
                 var producto = await _db.Dim_Producto.FindAsync(productoKey);
-                var totalVenta = detail.Quantity * detail.TotalPrice * (1 - detail.Discount);
+                //var totalVenta = detail.Quantity * detail.TotalPrice * (1 - detail.Discount);
                 var costo = detail.Quantity * (producto?.Costo ?? 0);
 
                 facts.Add(new FactVent
@@ -66,14 +61,11 @@ namespace Etl.Worker.Transformers
                     FechaKey = fechaKey,
                     ProductKey = productoKey,
                     ClienteKey = clienteKey,
-                    TiendaKey = tiendaKey,
-                    CanalKey = canalKey,
                     Cantidad_Vendida = detail.Quantity,
                     Precio_Unitario = detail.TotalPrice,
-                    Descuento = detail.Discount,
-                    Total_Venta = totalVenta,
+                  //  Total_Venta = totalVenta,
                     Costo = costo,
-                    Ganancia = totalVenta - costo,
+                  //  Ganancia = totalVenta - costo,
                     Moneda = "USD",
                     Fuente = "CSV"
                 });

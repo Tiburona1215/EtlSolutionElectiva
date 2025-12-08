@@ -20,8 +20,10 @@ namespace Etl.Worker.Loaders
         {
             foreach (var tiempo in data)
             {
+                //var existe = await _db.Dim_Tiempo
+                //    .AnyAsync(t => t.Fecha_Complet.Date == tiempo.Fecha_Complet.Date, ct);
                 var existe = await _db.Dim_Tiempo
-                    .AnyAsync(t => t.Fecha_Complet.Date == tiempo.Fecha_Complet.Date, ct);
+                    .AnyAsync(t => t.FechaKey == tiempo.FechaKey, ct);
 
                 if (!existe)
                 {

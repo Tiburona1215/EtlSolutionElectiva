@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((ctx, services) =>
     {
-        // Configurar DbContext
         var connectionString = ctx.Configuration.GetConnectionString("MainDb")
             ?? "Server=LENOVO12JANABJ;Database=DWSisVentas;Integrated Security=true;TrustServerCertificate=true";
 
@@ -35,14 +34,12 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddTransient<ITransformer<CustomerDto, DimCliente>, ClienteTransformer>();
         services.AddTransient<ITransformer<ProductDto, DimProducto>, ProductoTransformer>();
-        services.AddTransient<ITransformer<OrderDto, DimTienda>, TiendaTransformer>();
         services.AddTransient<ITransformer<OrderDto, DimCanal>, CanalTransformer>();
         services.AddTransient<ITransformer<OrderDto, DimTiempo>, TiempoTransformer>();
         services.AddTransient<FactVentCompleteTransformer>();
 
         services.AddTransient<ILoader<DimCliente>, ClienteLoader>();
         services.AddTransient<ILoader<DimProducto>, ProductoLoader>();
-        services.AddTransient<ILoader<DimTienda>, TiendaLoader>();
         services.AddTransient<ILoader<DimCanal>, CanalLoader>();
         services.AddTransient<ILoader<DimTiempo>, TiempoLoader>();
         services.AddTransient<ILoader<FactVent>, EfLoader>();

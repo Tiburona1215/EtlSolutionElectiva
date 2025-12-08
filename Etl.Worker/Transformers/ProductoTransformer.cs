@@ -17,12 +17,11 @@ namespace Etl.Worker.Transformers
             {
                 Codigo_Producto = dto.ProductID,
                 Nombre_Producto = dto.ProductName,
-                Marca = dto.Brand,
                 Categoria = dto.Category,
-                Precio_Act = dto.UnitPrice,
-                Costo = dto.Cost,
-                Unidad_Medida = dto.Unit,
-                Estado = dto.Status,
+                Precio_Act = dto.Price,
+                Costo = 0,
+                Unidad_Medida = "",
+                Estado = "Activo",
                 Fuente = "CSV"
             });
             return Task.FromResult(transformed);

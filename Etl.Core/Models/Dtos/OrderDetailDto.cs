@@ -11,10 +11,8 @@ namespace Etl.Core.Models.Dtos
     {
         [Key]
         public string OrderID { get; set; } = string.Empty;
-        public string CustomerID { get; set; } = string.Empty;
-        public string ProductID { get; set; } = string.Empty;
+        public int ProductID { get; set; }
         public decimal TotalPrice { get; set; }
         public int Quantity { get; set; }
-        public decimal Discount { get; set; }
     }
 }
