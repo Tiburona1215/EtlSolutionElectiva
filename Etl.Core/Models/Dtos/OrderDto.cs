@@ -13,7 +13,7 @@ namespace Etl.Core.Models.Dtos
         public string OrderID { get; set; } = string.Empty;
         public int CustomerID { get; set; }
         public DateTime OrderDate { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
         
     }
 }

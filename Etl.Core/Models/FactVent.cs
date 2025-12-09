@@ -18,10 +18,10 @@ namespace Etl.Core.Models
         public int ClienteKey { get; set; }
         public int Cantidad_Vendida { get; set; }
         public decimal Precio_Unitario { get; set; }
-        public decimal Descuento { get; set; } = 0;
-        public decimal Total_Venta { get; set; } = 0;
+        public decimal Descuento { get; set; }
+        public decimal Total_Venta { get; set; }
         public decimal Costo { get; set; }
-        public decimal Ganancia { get; set; } = 0;
+        public decimal Ganancia { get; set; }
         public string Moneda { get; set; } = string.Empty;
         public string Fuente { get; set; } = string.Empty;
 

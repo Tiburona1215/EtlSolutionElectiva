@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Etl.Worker.Transformers
@@ -35,11 +35,11 @@ namespace Etl.Worker.Transformers
 
             var orderLookup = orders.ToDictionary(o => o.OrderID);
 
-
             var facts = new List<FactVent>();
+
             foreach (var detail in orderDetails)
             {
-                if (!orderLookup.TryGetValue(detail.OrderID, out var order) || order == null)
+                if (!orderLookup.TryGetValue(detail.OrderID, out var order))
                     continue;
 
                 if (!clienteKeyLookup.TryGetValue(order.CustomerID, out var clienteKey))
@@ -54,16 +54,28 @@ namespace Etl.Worker.Transformers
                 if (!fechaKeyLookup.TryGetValue(order.OrderDate.Date, out var fechaKey))
                     continue;
 
-                var costo = detail.Quantity * costoUnitario;
+                var cantidad = detail.Quantity;
+
+                decimal precioUnitario = cantidad > 0
+                    ? detail.TotalPrice / cantidad
+                    : detail.TotalPrice;
+
+                decimal totalVenta = precioUnitario * cantidad;
+                decimal costoTotal = costoUnitario * cantidad;
+                decimal ganancia = totalVenta - costoTotal;
 
                 facts.Add(new FactVent
                 {
                     FechaKey = fechaKey,
                     ProductKey = productoKey,
                     ClienteKey = clienteKey,
-                    Cantidad_Vendida = detail.Quantity,
-                    Precio_Unitario = detail.TotalPrice,
-                    Costo = costo,
+
+                    Cantidad_Vendida = cantidad,
+                    Precio_Unitario = precioUnitario,
+                    Total_Venta = totalVenta,
+                    Costo = costoTotal,
+                    Ganancia = ganancia,
+
                     Moneda = "USD",
                     Fuente = "CSV"
                 });
@@ -71,6 +83,5 @@ namespace Etl.Worker.Transformers
 
             return facts;
         }
-
     }
 }

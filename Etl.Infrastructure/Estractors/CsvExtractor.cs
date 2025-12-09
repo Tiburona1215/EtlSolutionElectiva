@@ -19,10 +19,15 @@ namespace Etl.Infrastructure.Estractors
         public async Task<IEnumerable<T>> ExtractAsync(CancellationToken ct = default)
         {
             using var reader = new StreamReader(_filePath);
-            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                HasHeaderRecord = true
-            });
+                HasHeaderRecord = true,
+                HeaderValidated = null,
+                MissingFieldFound = null
+            };
+
+            using var csv = new CsvReader(reader, config);
 
             var list = new List<T>();
             await foreach (var record in csv.GetRecordsAsync<T>().WithCancellation(ct))
