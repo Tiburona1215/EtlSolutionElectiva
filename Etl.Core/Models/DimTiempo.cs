@@ -16,7 +16,7 @@ namespace Etl.Core.Models
         public int Mes { get; set; }
         public int Trimestre { get; set; }
         public int Día { get; set; }
-        public string Nombre_Mes { get; set; } = string.Empty;
+        public string? Nombre_Mes { get; set; } = string.Empty;
         public ICollection<FactVent> Ventas { get; set; } = new List<FactVent>();
     }
 }

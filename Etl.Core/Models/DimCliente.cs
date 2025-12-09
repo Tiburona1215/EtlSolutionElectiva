@@ -12,15 +12,15 @@ namespace Etl.Core.Models
         [Key]
         public int ClienteKey { get; set; }
         public int ID_Cliente { get; set; }
-        public string Nombre_Cliente { get; set; } = string.Empty;
-        public string LastName_Cliente { get; set; } = string.Empty;
+        public string? FirstName { get; set; } = string.Empty;
+        public string? LastName { get; set; } = string.Empty;
        // public string Tipo_Cliente { get; set; } = string.Empty;
-        public string Pais { get; set; } = string.Empty;
+        public string? Pais { get; set; } = string.Empty;
         //public string Region { get; set; } = string.Empty;
-        public string Ciudad { get; set; } = string.Empty;
-        public string Codigo_Postal { get; set; } = string.Empty;
-        public string Correo { get; set; } = string.Empty;
-        public string Telefono { get; set; } = string.Empty;
+        public string? Ciudad { get; set; } = string.Empty;
+        public string? Codigo_Postal { get; set; } = string.Empty;
+        public string? Correo { get; set; } = string.Empty;
+        public string? Telefono { get; set; } = string.Empty;
         public DateTime Fecha_Registro { get; set; }
 
         public ICollection<FactVent> Ventas { get; set; } = new List<FactVent>();

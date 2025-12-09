@@ -38,12 +38,10 @@ public class Worker : BackgroundService
 
             var clienteTransformer = services.GetRequiredService<ITransformer<CustomerDto, DimCliente>>();
             var productoTransformer = services.GetRequiredService<ITransformer<ProductDto, DimProducto>>();
-            var canalTransformer = services.GetRequiredService<ITransformer<OrderDto, DimCanal>>();
             var tiempoTransformer = services.GetRequiredService<ITransformer<OrderDto, DimTiempo>>();
 
             var clienteLoader = services.GetRequiredService<ILoader<DimCliente>>();
             var productoLoader = services.GetRequiredService<ILoader<DimProducto>>();
-            var canalLoader = services.GetRequiredService<ILoader<DimCanal>>();
             var tiempoLoader = services.GetRequiredService<ILoader<DimTiempo>>();
             var factLoader = services.GetRequiredService<ILoader<FactVent>>();
 
@@ -66,10 +64,6 @@ public class Worker : BackgroundService
             // 3. CARGAR DIMENSIONES DE ÓRDENES
             _logger.LogInformation("3. Cargando dimensiones de Órdenes...");
             var orders = await orderExtractor.ExtractAsync(stoppingToken);
-
-            var canales = await canalTransformer.TransformAsync(orders, stoppingToken);
-            await canalLoader.LoadAsync(canales, stoppingToken);
-            _logger.LogInformation($"   ? {canales.Count()} canales cargados");
 
             var tiempos = await tiempoTransformer.TransformAsync(orders, stoppingToken);
             await tiempoLoader.LoadAsync(tiempos, stoppingToken);

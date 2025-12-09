@@ -34,13 +34,11 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddTransient<ITransformer<CustomerDto, DimCliente>, ClienteTransformer>();
         services.AddTransient<ITransformer<ProductDto, DimProducto>, ProductoTransformer>();
-        services.AddTransient<ITransformer<OrderDto, DimCanal>, CanalTransformer>();
         services.AddTransient<ITransformer<OrderDto, DimTiempo>, TiempoTransformer>();
         services.AddTransient<FactVentCompleteTransformer>();
 
         services.AddTransient<ILoader<DimCliente>, ClienteLoader>();
         services.AddTransient<ILoader<DimProducto>, ProductoLoader>();
-        services.AddTransient<ILoader<DimCanal>, CanalLoader>();
         services.AddTransient<ILoader<DimTiempo>, TiempoLoader>();
         services.AddTransient<ILoader<FactVent>, EfLoader>();
 

@@ -18,16 +18,11 @@ namespace Etl.Worker.Loaders
 
         public async Task LoadAsync(IEnumerable<DimCliente> data, CancellationToken ct = default)
         {
-            foreach (var cliente in data)
-            {
-                var existe = await _db.Dim_Cliente
-                    .AnyAsync(c => c.ID_Cliente == cliente.ID_Cliente, ct);
+            var existingKeys = await _db.Dim_Cliente.Select(c => c.ID_Cliente) .ToListAsync(ct);
+            var existingKeySet = new HashSet<int>(existingKeys);
+            var newClients = data .Where(cliente => !existingKeySet.Contains(cliente.ID_Cliente));
 
-                if (!existe)
-                {
-                    await _db.Dim_Cliente.AddAsync(cliente, ct);
-                }
-            }
+            await _db.Dim_Cliente.AddRangeAsync(newClients, ct);
             await _db.SaveChangesAsync(ct);
         }
     }

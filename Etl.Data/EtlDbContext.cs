@@ -14,7 +14,6 @@ namespace Etl.Data
 
         public DbSet<DimProducto> Dim_Producto => Set<DimProducto>();
         public DbSet<DimCliente> Dim_Cliente => Set<DimCliente>();
-        public DbSet<DimCanal> Dim_Canal => Set<DimCanal>();
         public DbSet<DimTiempo> Dim_Tiempo => Set<DimTiempo>();
         public DbSet<FactVent> Fact_Vent => Set<FactVent>();
 
@@ -29,11 +28,6 @@ namespace Etl.Data
                 .HasOne(f => f.Cliente)
                 .WithMany(c => c.Ventas)
                 .HasForeignKey(f => f.ClienteKey);
-
-            modelBuilder.Entity<FactVent>()
-                .HasOne(f => f.Canal)
-                .WithMany(c => c.Ventas)
-                .HasForeignKey(f => f.CanalKey);
 
             modelBuilder.Entity<FactVent>()
                 .HasOne(f => f.Tiempo)

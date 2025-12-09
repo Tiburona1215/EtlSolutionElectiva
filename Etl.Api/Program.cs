@@ -31,7 +31,7 @@ app.MapGet("/api/ventas/rango", async (DateTime desde, DateTime hasta, EtlDbCont
             v.ID_Venta,
             Fecha = v.Tiempo!.Fecha_Complet,
             Producto = v.Producto!.Nombre_Producto,
-            Cliente = v.Cliente!.Nombre_Cliente,
+            Cliente = v.Cliente!.FirstName,
             v.Total_Venta,
             v.Moneda
         })
@@ -60,7 +60,7 @@ app.MapGet("/api/ventas/top-productos", async (int limite, EtlDbContext db) =>
 app.MapGet("/api/ventas/top-clientes", async (int limite, EtlDbContext db) =>
 {
     var topClientes = await db.Fact_Vent
-        .GroupBy(v => v.Cliente!.Nombre_Cliente)
+        .GroupBy(v => v.Cliente!.FirstName)
         .Select(g => new
         {
             Cliente = g.Key,
