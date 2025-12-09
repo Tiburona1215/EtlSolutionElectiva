@@ -18,11 +18,8 @@ namespace Etl.Worker.Transformers
                 ID_Cliente = dto.CustomerID,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-              // Tipo_Cliente = dto.CustomerType,
                 Pais = dto.Country,
-               // Region = dto.Region,
                 Ciudad = dto.City,
-               // Codigo_Postal = dto.PostalCode,
                 Correo = dto.Email,
                 Telefono = dto.Phone,
                 Fecha_Registro = DateTime.Now

@@ -16,7 +16,6 @@ namespace Etl.Core.Models
         public int TiendaKey { get; set; }
         public int CanalKey { get; set; }
 
-        //vent
         public int Cantidad_Vendida { get; set; }
         public decimal Precio_Unitario { get; set; }
         public decimal Descuento { get; set; }
@@ -24,7 +23,6 @@ namespace Etl.Core.Models
         public decimal Costo { get; set; }
         public decimal Ganancia { get; set; }
 
-        //others
         public string Moneda { get; set; } = string.Empty;
         public string Fuente { get; set; } = string.Empty;
     }

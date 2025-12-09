@@ -26,11 +26,15 @@ public class Worker : BackgroundService
         {
             _logger.LogInformation("=== ETL INICIADO ===");
 
-            // Crear un scope para resolver servicios que dependen de DbContext
             using var scope = _serviceProvider.CreateScope();
             var services = scope.ServiceProvider;
 
-            // Resolver todos los servicios del scope
+            var dbContext = services.GetRequiredService<EtlDbContext>();
+
+            _logger.LogInformation("0. Limpiando tablas del DataWarehouse...");
+            await ClearDataWarehouseAsync(dbContext, stoppingToken);
+            _logger.LogInformation("   ? Limpieza de tablas completada.");
+
             var customerExtractor = services.GetRequiredService<IExtractor<CustomerDto>>();
             var productExtractor = services.GetRequiredService<IExtractor<ProductDto>>();
             var orderExtractor = services.GetRequiredService<IExtractor<OrderDto>>();
@@ -47,21 +51,18 @@ public class Worker : BackgroundService
 
             var factTransformer = services.GetRequiredService<FactVentCompleteTransformer>();
 
-            // 1. CARGAR DIMENSIÓN CLIENTES
             _logger.LogInformation("1. Cargando dimensión Clientes...");
             var customers = await customerExtractor.ExtractAsync(stoppingToken);
             var clientes = await clienteTransformer.TransformAsync(customers, stoppingToken);
             await clienteLoader.LoadAsync(clientes, stoppingToken);
             _logger.LogInformation($"   ? {clientes.Count()} clientes cargados");
 
-            // 2. CARGAR DIMENSIÓN PRODUCTOS
             _logger.LogInformation("2. Cargando dimensión Productos...");
             var products = await productExtractor.ExtractAsync(stoppingToken);
             var productos = await productoTransformer.TransformAsync(products, stoppingToken);
             await productoLoader.LoadAsync(productos, stoppingToken);
             _logger.LogInformation($"   ? {productos.Count()} productos cargados");
 
-            // 3. CARGAR DIMENSIONES DE ÓRDENES
             _logger.LogInformation("3. Cargando dimensiones de Órdenes...");
             var orders = await orderExtractor.ExtractAsync(stoppingToken);
 
@@ -69,7 +70,6 @@ public class Worker : BackgroundService
             await tiempoLoader.LoadAsync(tiempos, stoppingToken);
             _logger.LogInformation($"   ? {tiempos.Count()} fechas cargadas");
 
-            // 4. CARGAR HECHOS (FACT TABLE)
             _logger.LogInformation("4. Cargando hechos de ventas...");
             var orderDetails = await orderDetailExtractor.ExtractAsync(stoppingToken);
             var facts = await factTransformer.TransformAsync(orders, orderDetails, stoppingToken);
@@ -84,4 +84,14 @@ public class Worker : BackgroundService
             throw;
         }
     }
+
+    private async Task ClearDataWarehouseAsync(EtlDbContext dbContext, CancellationToken ct)
+    {
+        await dbContext.Fact_Vent.ExecuteDeleteAsync(ct);
+
+        await dbContext.Dim_Producto.ExecuteDeleteAsync(ct);
+        await dbContext.Dim_Cliente.ExecuteDeleteAsync(ct);
+        await dbContext.Dim_Tiempo.ExecuteDeleteAsync(ct); 
+    
+}
     }

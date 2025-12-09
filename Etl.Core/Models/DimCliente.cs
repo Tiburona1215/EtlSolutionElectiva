@@ -14,9 +14,7 @@ namespace Etl.Core.Models
         public int ID_Cliente { get; set; }
         public string? FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; } = string.Empty;
-       // public string Tipo_Cliente { get; set; } = string.Empty;
         public string? Pais { get; set; } = string.Empty;
-        //public string Region { get; set; } = string.Empty;
         public string? Ciudad { get; set; } = string.Empty;
         public string? Codigo_Postal { get; set; } = string.Empty;
         public string? Correo { get; set; } = string.Empty;
